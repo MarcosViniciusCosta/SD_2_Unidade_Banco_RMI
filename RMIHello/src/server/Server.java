@@ -1,6 +1,14 @@
 package server;
 
 import java.rmi.registry.Registry;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
@@ -24,7 +32,7 @@ public class Server implements Operacoes_banco {
 	public static void main(String args[]) {
 
 		try {
-			base_de_dados = new ArrayList<Conta>();
+			ler_base_de_dados_do_txt();
 			//criar objeto servidor
 			Server refObjetoRemoto = new Server();
 
@@ -95,7 +103,7 @@ public class Server implements Operacoes_banco {
 	public Conta criar_conta(Conta c) throws RemoteException {
 
 		base_de_dados.add(c);
-
+		salvar_base_de_dados_no_txt();
 		return c;
 	}
 
@@ -252,5 +260,72 @@ public class Server implements Operacoes_banco {
 		return null;
 	}
 	
+	private static void ler_base_de_dados_do_txt()
+	{
+		String caminho = "base_de_dados.txt";
+		File arquivo = new File(caminho);
+		
+		try {
+			FileInputStream fileinput = new FileInputStream(arquivo);
+			ObjectInput objectinput = new ObjectInputStream(fileinput);
+			
+			base_de_dados = (ArrayList<Conta>) objectinput.readObject();
+			
+			objectinput.close();
+			fileinput.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
+	private static boolean salvar_base_de_dados_no_txt()
+	{
+		
+			String caminho = "base_de_dados.txt";
+			File arquivo = new File(caminho);
+			
+			if(arquivo.exists() == false) 
+			{
+				try {
+					arquivo.createNewFile();
+				} catch (IOException e) {
+					System.out.println("Arquivo não criado");
+					e.printStackTrace();
+					return false;
+				}
+			}
+			
+			
+			try {
+				FileOutputStream fileoutputstream = new FileOutputStream(arquivo);
+				
+				ObjectOutputStream objectoutputstream = new ObjectOutputStream(fileoutputstream);
+			
+				objectoutputstream.writeObject(base_de_dados);
+				
+				objectoutputstream.flush();
+				fileoutputstream.flush();
+				
+				objectoutputstream.close();
+				fileoutputstream.close();
+				
+				
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+				
+		
+		return true;
+	} 
 	
 }

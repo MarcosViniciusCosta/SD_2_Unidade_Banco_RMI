@@ -31,7 +31,7 @@ public class Cliente {
         
             Operacoes_banco stub = (Operacoes_banco) registro.lookup("Banco");
             
-            
+            /*
             //criando conta para testar stubs
             
             Dados_login dados_login = new Dados_login();
@@ -53,7 +53,7 @@ public class Cliente {
             Conta c = new Conta(cpf,nome, endereco, data_nascimento,numero_telefonico, dados_login);
             //System.out.println("Conta criada com sucesso");
             stub.criar_conta(c);
-            
+            */
             System.out.println(stub.listar_contas());
             
             
