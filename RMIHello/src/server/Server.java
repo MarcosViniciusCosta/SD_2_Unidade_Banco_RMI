@@ -90,8 +90,8 @@ public class Server implements Operacoes_banco {
 		for(int cont=0;cont<base_de_dados.size();cont++)
 		{
 			Conta temporaria = base_de_dados.get(cont);
-			if(temporaria.getSenha().equals(senha) &&
-					temporaria.getLogin().equals(login))
+			if(temporaria.getDados_login().getSenha().equals(senha) &&
+					temporaria.getDados_login().getUsuario().equals(login))
 			{
 				return temporaria;
 			}
@@ -110,7 +110,7 @@ public class Server implements Operacoes_banco {
 	@Override
 	public Conta editar_conta(Conta c) throws RemoteException {
 
-		Conta temporaria = buscar_conta(c);
+		Conta temporaria = buscar_conta(c.getNumeroContaCliente());
 
 		if(temporaria == null)
 		{
@@ -121,13 +121,14 @@ public class Server implements Operacoes_banco {
 			base_de_dados.add(c);
 		}
 		
+		salvar_base_de_dados_no_txt();
 		return c;
 	}
 
 	@Override
 	public boolean remover_conta(Conta c) throws RemoteException {
 
-		Conta removida = buscar_conta(c);
+		Conta removida = buscar_conta(c.getNumeroContaCliente());
 		if(removida == null)
 		{
 			System.out.println("Impossível remover conta inexistente");
@@ -137,6 +138,7 @@ public class Server implements Operacoes_banco {
 			return true;
 		}
 
+		salvar_base_de_dados_no_txt();
 		return false;
 	}
 
@@ -159,7 +161,7 @@ public class Server implements Operacoes_banco {
 	public boolean sacar_valor(Conta c,double valor) throws RemoteException 
 	{
 
-		Conta conta_atual = buscar_conta(c);
+		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
 		
 
 		if(conta_atual == null)
@@ -175,20 +177,21 @@ public class Server implements Operacoes_banco {
 			{
 				//saldo suficiente
 				conta_atual.setSaldo(conta_atual.getSaldo()-valor);
-				System.out.println("Novo saldo = "+ conta_atual.getSaldo());
+				//System.out.println("Novo saldo = "+ conta_atual.getSaldo());
+				return true;
 			}
 		}
 
 
 
-
+		salvar_base_de_dados_no_txt();
 		return false;
 	}
 
 	@Override
 	public boolean depositar_valor(Conta c,double valor) throws RemoteException {
 
-		Conta conta_atual = buscar_conta(c);
+		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
 
 		if(conta_atual == null)
 		{
@@ -201,6 +204,7 @@ public class Server implements Operacoes_banco {
 			System.out.println("Novo saldo = "+ conta_atual.getSaldo());
 		}
 
+		salvar_base_de_dados_no_txt();
 		return true;
 	}
 
@@ -209,7 +213,7 @@ public class Server implements Operacoes_banco {
 	public double consultar_saldo(Conta c) throws RemoteException 
 	{
 		
-		Conta conta_atual = buscar_conta(c);
+		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
 		
 		
 		if(conta_atual == null)
@@ -231,7 +235,7 @@ public class Server implements Operacoes_banco {
 	public boolean aderir_renda_fixa(Conta c) throws RemoteException 
 	{
 		
-		Conta conta_atual = buscar_conta(c);
+		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
 		
 		
 		if(conta_atual == null)
@@ -245,19 +249,36 @@ public class Server implements Operacoes_banco {
 			System.out.println("Conta "+ conta_atual.getNumeroContaCliente() +" Aderiu a renda fixa.");
 		}
 		
-		
+		salvar_base_de_dados_no_txt();
 		return true;
 	}
 	
-	private Conta buscar_conta(Conta c)
+	
+	private Conta buscar_conta(long id_conta_buscada)
 	{
 		for(int cont=0;cont<base_de_dados.size();cont++)
 		{
 			Conta temporaria = base_de_dados.get(cont);
-			if(temporaria.getNumeroContaCliente() == c.getNumeroContaCliente()) return temporaria;
+			if(temporaria.getNumeroContaCliente() == id_conta_buscada) return temporaria;
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public boolean transferir_saldo (Conta origem,double valor,long id_conta_alvo)
+	{
+		Conta conta_alvo = buscar_conta(id_conta_alvo);
+		if(conta_alvo == null)
+		{
+			return false;
+		}else
+		{
+			origem.setSaldo(origem.getSaldo()-valor);
+			conta_alvo.setSaldo(conta_alvo.getSaldo()+valor);
+			salvar_base_de_dados_no_txt();
+		}
+		return true;
 	}
 	
 	private static void ler_base_de_dados_do_txt()
@@ -275,7 +296,10 @@ public class Server implements Operacoes_banco {
 			fileinput.close();
 			
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			// base de dados não encontrada, inicializando do zero
+			base_de_dados = new ArrayList<Conta>();
+			Conta.SetcontroladorNumeroConta(base_de_dados.size());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

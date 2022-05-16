@@ -13,11 +13,13 @@ public class Conta implements Serializable{
 	private String numeroTelefonicoCliente;
 	private Dados_login dados_login;
 	private double saldo;
-	private String senha;
-	private String login;
 	private int tipoInvestimento;	//	0 - poupança, 1 - renda fixa
+	private boolean solicitada_remocao;
 	
-	
+	public static void SetcontroladorNumeroConta(long novo_valor)
+	{
+		controladorNumeroConta = novo_valor;
+	}
 	
 	
 	public int getTipoInvestimento() {
@@ -55,9 +57,20 @@ public class Conta implements Serializable{
 		setSaldo(0);
 		setDados_login(dados_login);
 		setTipoInvestimento(0);
+		setSolicitada_remocao(false);;
 	}
 	
 	
+	public boolean isSolicitada_remocao() {
+		return solicitada_remocao;
+	}
+
+
+	public void setSolicitada_remocao(boolean solicitada_remocao) {
+		this.solicitada_remocao = solicitada_remocao;
+	}
+
+
 	public Conta() {
 		
 	}
@@ -73,24 +86,7 @@ public class Conta implements Serializable{
 	}
 
 
-	public String getSenha() {
-		return senha;
-	}
-
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-
-	public String getLogin() {
-		return login;
-	}
-
-
-	public void setLogin(String login) {
-		this.login = login;
-	}
+	
 
 
 	
