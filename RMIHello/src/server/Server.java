@@ -202,7 +202,7 @@ public class Server implements Operacoes_banco {
 		{
 			// adicionando no saldo
 			conta_atual.setSaldo(conta_atual.getSaldo()+valor);
-			System.out.println("Novo saldo = "+ conta_atual.getSaldo());
+			//System.out.println("Novo saldo = "+ conta_atual.getSaldo());
 		}
 
 		salvar_base_de_dados_no_txt();
