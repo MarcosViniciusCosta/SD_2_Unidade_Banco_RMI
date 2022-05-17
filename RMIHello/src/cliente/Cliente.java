@@ -23,7 +23,7 @@ public class Cliente {
 
 		Scanner teclado = new Scanner(System.in);
 
-		System.out.println("Informe o nome/endereço do RMIRegistry:");
+		System.out.println("Informe o nome/endereï¿½o do RMIRegistry:");
 		String host = teclado.nextLine();
 
 
@@ -44,9 +44,9 @@ public class Cliente {
             String nome = teclado.nextLine();
             System.out.print("Digite o seu cpf: ");
             String cpf = teclado.nextLine();
-            System.out.print("Digite o seu endereço: ");
+            System.out.print("Digite o seu endereï¿½o: ");
             String endereco = teclado.nextLine();
-            System.out.print("Digite o seu número telefônico: ");
+            System.out.print("Digite o seu nï¿½mero telefï¿½nico: ");
             String numero_telefonico = teclado.nextLine();
             System.out.print("Digite a sua data de nascimento: ");
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -67,7 +67,7 @@ public class Cliente {
 				System.out.println("\n1 - Fazer login");
 				System.out.println("2 - Sair");
 
-				System.out.print("Digite a opção ao lado: ");
+				System.out.print("Digite a opï¿½ï¿½o ao lado: ");
 				int opcao = teclado.nextInt();
 				// capturando \n
 				teclado.nextLine();
@@ -86,18 +86,18 @@ public class Cliente {
 
 					if(logada == null)
 					{
-						System.out.println("Dados de login inválido");
+						System.out.println("Dados de login invï¿½lido");
 					}else
 					{
 						if(logada.getDados_login().getTipo() == 0)
 						{
-							System.out.println("Bem-vindo, Usuário " + logada.getNomeCliente());
+							System.out.println("Bem-vindo, Usuï¿½rio " + logada.getNomeCliente());
 							menu_usuario(teclado,logada,stub);
 							sair = true;
 							break;
 						}else
 						{
-							System.out.println("Bem-vindo, funcionário " + logada.getNomeCliente());
+							System.out.println("Bem-vindo, funcionï¿½rio " + logada.getNomeCliente());
 						}
 					}
 					break;
@@ -128,16 +128,16 @@ public class Cliente {
 		{
 			System.out.println("\n1 - Consultar saldo");
 			System.out.println("2 - Realizar saque");
-			System.out.println("3 - Realizar depósito");
-			System.out.println("4 - Realizar transferência");
+			System.out.println("3 - Realizar depï¿½sito");
+			System.out.println("4 - Realizar transferï¿½ncia");
 			System.out.println("5 - Consultar resultados dos investimentos");
 			System.out.println("6 - Mudar o regime dos investimentos");
-			System.out.println("7 - Solicitar remoção da conta");
+			System.out.println("7 - Solicitar remoï¿½ï¿½o da conta");
 			System.out.println("8 - Listar contas");
 			System.out.println("9 - Alterar dados da conta");
-			System.out.println("10 - Alterar nível de conta para funcionário");
+			System.out.println("10 - Alterar nï¿½vel de conta para funcionï¿½rio");
 			System.out.println("11 - Sair");
-			System.out.print("Digite a opção ao lado: ");
+			System.out.print("Digite a opï¿½ï¿½o ao lado: ");
 			opcao = teclado.nextInt();
 			//capturando o \n
 			teclado.nextLine();
@@ -184,10 +184,10 @@ public class Cliente {
 
 					if(deu_certo == false)
 					{
-						System.out.println("Conta não encontrada");
+						System.out.println("Conta nï¿½o encontrada");
 					}else
 					{
-						// atualizar a conta que está em seção atual
+						// atualizar a conta que estï¿½ em seï¿½ï¿½o atual
 						logada = stub.fazer_login(logada.getDados_login().getUsuario(),
 								logada.getDados_login().getSenha());
 						System.out.println("Novo saldo = "+ logada.getSaldo());
@@ -208,10 +208,10 @@ public class Cliente {
 				teclado.nextLine();
 				if(valor_a_ser_transferido > logada.getSaldo())
 				{
-					System.out.println("Impossível transferir valor maior do que o saldo atual");
+					System.out.println("Impossï¿½vel transferir valor maior do que o saldo atual");
 				}else
 				{
-					System.out.print("Digite o código da conta que receberá a transferência: ");
+					System.out.print("Digite o cï¿½digo da conta que receberï¿½ a transferï¿½ncia: ");
 					long conta_alvo = teclado.nextLong();
 					//capturando o \n
 					teclado.nextLine();
@@ -225,7 +225,7 @@ public class Cliente {
 							
 							
 							
-							System.out.println("Operação de transferência concluída com sucesso");
+							System.out.println("Operaï¿½ï¿½o de transferï¿½ncia concluï¿½da com sucesso");
 							System.out.println("Novo saldo: " + logada.getSaldo());
 						}
 
@@ -238,20 +238,20 @@ public class Cliente {
 				break;
 		
 			case 5:
-				// conta poupança
+				// conta poupanï¿½a
 				if(logada.getTipoInvestimento() == 0)	
 				{
-					System.out.println("\nSimulação de investimento para conta poupança");
+					System.out.println("\nSimulaï¿½ï¿½o de investimento para conta poupanï¿½a");
 					System.out.println("Valor atual: " + logada.getSaldo());
-					System.out.println("Valor daqui a três meses: " + (logada.getSaldo()*1.015));
+					System.out.println("Valor daqui a trï¿½s meses: " + (logada.getSaldo()*1.015));
 					System.out.println("Valor daqui a seis meses: " + (logada.getSaldo()*1.030));
 					System.out.println("Valor daqui a doze meses: " + (logada.getSaldo()*1.060)+"\n");
 				}else
 				{
 					// conta de renda fixa
-					System.out.println("\nSimulação de investimento para conta de renda fixa");
+					System.out.println("\nSimulaï¿½ï¿½o de investimento para conta de renda fixa");
 					System.out.println("Valor atual: " + logada.getSaldo());
-					System.out.println("Valor daqui a três meses: " + (logada.getSaldo()*1.045));
+					System.out.println("Valor daqui a trï¿½s meses: " + (logada.getSaldo()*1.045));
 					System.out.println("Valor daqui a seis meses: " + (logada.getSaldo()*1.090));
 					System.out.println("Valor daqui a doze meses: " + (logada.getSaldo()*1.180)+"\n");
 				}
@@ -263,7 +263,7 @@ public class Cliente {
 				if(logada.getTipoInvestimento() == 1)	
 				{
 					logada.setTipoInvestimento(0);
-					System.out.println("Conta opera agora sobre a poupança");
+					System.out.println("Conta opera agora sobre a poupanï¿½a");
 				}else
 				{
 					if(logada.getTipoInvestimento() == 0)	
@@ -288,16 +288,16 @@ public class Cliente {
 				//editar dados da conta
 			case 9:
 				try {
-				System.out.println("Dados modificáveis exibidos abaixo");
-				System.out.println("Endereço atual: "+ logada.getEnderecoCliente());
+				System.out.println("Dados modificï¿½veis exibidos abaixo");
+				System.out.println("Endereï¿½o atual: "+ logada.getEnderecoCliente());
 				System.out.println("Data de nascimento: "+ logada.getDataNascimentoCliente());
-				System.out.println("Numero telefônico: " + logada.getNumeroTelefonicoCliente());
-				System.out.println("\n\nDigite o novo endereço atual ao lado: ");
+				System.out.println("Numero telefï¿½nico: " + logada.getNumeroTelefonicoCliente());
+				System.out.println("\n\nDigite o novo endereï¿½o atual ao lado: ");
 				logada.setEnderecoCliente(teclado.nextLine());
 				System.out.println("\n\nDigite a nova data de nascimento ao lado: ");
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	            logada.setDataNascimentoCliente(sdf.parse(teclado.next()));
-	            System.out.println("\n\nDigite o novo número telefônico ao lado: ");
+	            System.out.println("\n\nDigite o novo nï¿½mero telefï¿½nico ao lado: ");
 				logada.setNumeroTelefonicoCliente(teclado.nextLine());
 	            stub.editar_conta(logada);
 				} catch (ParseException e) {
@@ -306,7 +306,7 @@ public class Cliente {
 				
 				break;
 			case 10:
-				System.out.println("Nível da conta alterado para funcionário");
+				System.out.println("Nï¿½vel da conta alterado para funcionï¿½rio");
 				logada.getDados_login().setTipo(1);
 				stub.editar_conta(logada);
 				return 2;

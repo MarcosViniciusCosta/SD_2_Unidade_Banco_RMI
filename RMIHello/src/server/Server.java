@@ -27,6 +27,7 @@ public class Server implements Operacoes_banco {
 	public Server() {}
 	static ArrayList<Conta> base_de_dados; 
 	// implementação do método oi()
+	// teste
 
 
 	public static void main(String args[]) {
