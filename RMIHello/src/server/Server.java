@@ -127,9 +127,9 @@ public class Server implements Operacoes_banco {
 	}
 
 	@Override
-	public boolean remover_conta(Conta c) throws RemoteException {
+	public boolean remover_conta(long id) throws RemoteException {
 
-		Conta removida = buscar_conta(c.getNumeroContaCliente());
+		Conta removida = buscar_conta(id);
 		if(removida == null)
 		{
 			System.out.println("Impossível remover conta inexistente");
@@ -292,15 +292,17 @@ public class Server implements Operacoes_banco {
 			ObjectInput objectinput = new ObjectInputStream(fileinput);
 			
 			base_de_dados = (ArrayList<Conta>) objectinput.readObject();
-			
+			Conta.setcontroladorNumeroConta(base_de_dados.size());
+			System.out.println("Base de dados iniciando com o tamanho "+ base_de_dados.size());
 			objectinput.close();
 			fileinput.close();
 			
 		} catch (FileNotFoundException e) {
 			//e.printStackTrace();
 			// base de dados não encontrada, inicializando do zero
+			System.out.println("Base de dados iniciando vazia");
 			base_de_dados = new ArrayList<Conta>();
-			Conta.SetcontroladorNumeroConta(base_de_dados.size());
+			Conta.setcontroladorNumeroConta(base_de_dados.size());
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -352,5 +354,24 @@ public class Server implements Operacoes_banco {
 		
 		return true;
 	} 
+	
+	@Override
+	public String listar_contas_a_serem_removidas() throws RemoteException 
+	{
+		String retorno = "";
+		for(int cont= 0;cont<base_de_dados.size();cont++)
+		{
+			Conta temporaria = base_de_dados.get(cont);
+			if(temporaria.isSolicitada_remocao() == true)
+			{
+				retorno +="Número de conta: " + temporaria.getNumeroContaCliente()+"\n";
+				retorno +="Nome do cliente: " + temporaria.getNomeCliente()+"\n";
+				//retorno +="Saldo do cliente: " + temporaria.getSaldo()+"\n\n\n";
+			}
+			
+		}
+		return retorno;
+	}
+	
 	
 }

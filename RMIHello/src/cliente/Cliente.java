@@ -32,9 +32,9 @@ public class Cliente {
 
 			Operacoes_banco stub = (Operacoes_banco) registro.lookup("Banco");
 
-
-			//criando conta para testar stubs
 			/*
+			//criando conta para testar stubs
+			
             Dados_login dados_login = new Dados_login();
             System.out.print("Digite o seu login desejado: ");
             dados_login.setUsuario(teclado.nextLine());
@@ -54,10 +54,11 @@ public class Cliente {
             Conta c = new Conta(cpf,nome, endereco, data_nascimento,numero_telefonico, dados_login);
             //System.out.println("Conta criada com sucesso");
             stub.criar_conta(c);
-			 */
-
+			c.getDados_login().elevar_nivel_para_funcionario();
+			stub.editar_conta(c);
+			*/
 			//System.out.println(stub.listar_contas());
-
+			
 			Conta logada = null;
 			boolean sair = false;
 
@@ -80,8 +81,7 @@ public class Cliente {
 					System.out.print("Digite sua senha ao lado: ");
 					String senha = teclado.nextLine();
 
-					//System.out.println("Login lido = " + login );
-					//System.out.println("Senha lida = " + senha );
+					
 					logada = stub.fazer_login(login, senha);
 
 					if(logada == null)
@@ -279,6 +279,7 @@ public class Cliente {
 			case 7:
 				logada.setSolicitada_remocao(true);
 				stub.editar_conta(logada);
+				System.out.println("Solicitação de remoção de conta realizada com sucesso!");
 				break;
 
 			case 8:
@@ -307,7 +308,7 @@ public class Cliente {
 
 				break;
 			case 10:
-				System.out.println("N�vel da conta alterado para funcion�rio");
+				System.out.println("Nível da conta alterado para funcionário");
 				logada.getDados_login().setTipo(1);
 				stub.editar_conta(logada);
 				return 2;
@@ -326,7 +327,7 @@ public class Cliente {
 	public static int menu_funcionario(Scanner teclado, Conta logada, Operacoes_banco stub)
 	{
 		int opcao = 0;
-		while(opcao != 11)
+		while(opcao != 12)
 		{
 			System.out.println("\n1 - Criar conta");
 			System.out.println("2 - Alterar conta");
@@ -382,8 +383,44 @@ public class Cliente {
 					break;
 
 				case 5:
-
-
+					System.out.println("Listando contas que pediram remoção:\n");
+					System.out.println(stub.listar_contas_a_serem_removidas());
+					
+					System.out.println("\n0 - Não remover nenhuma conta agora");
+					System.out.println("1 - Remover alguma conta agora");
+					System.out.print("Digite a opção ao lado: ");
+					int op = teclado.nextInt();
+					// capturando \n
+					teclado.nextLine();
+					
+					switch(op)
+					{
+						case 0:
+							System.out.println("Não será removida conta alguma.");
+							break;
+						case 1:
+							System.out.print("Digite o número da conta a ser excluida: ");
+							long numero_conta_a_ser_excluida = teclado.nextLong();
+							// capturando \n
+							teclado.nextLine();
+							
+							boolean deu_certo = stub.remover_conta(numero_conta_a_ser_excluida);
+							
+							if(deu_certo == true)
+							{
+								System.out.println("Conta de número "+numero_conta_a_ser_excluida+" foi excluida com sucesso!");
+							}else
+							{
+								System.out.println("Conta de número "+numero_conta_a_ser_excluida+" não foi encontrada!");
+							}
+							
+							
+							break;
+					}
+					
+					
+					
+					break;
 				case 6:
 					System.out.printf("Saldo da conta atual = %.2f\n",logada.getSaldo());
 					break;
