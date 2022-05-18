@@ -135,11 +135,20 @@ public class Server implements Operacoes_banco {
 		Conta removida = buscar_conta(id);
 		if(removida == null)
 		{
-			System.out.println("Impossível remover conta inexistente");
+			//System.out.println("Impossível remover conta inexistente");
 		}else
 		{
-			base_de_dados.remove(removida);
-			return true;
+			// só podemos remover contas que solicitaram remoção
+			if(removida.isSolicitada_remocao() == false) 
+			{
+				return false;
+			}else
+			{
+				base_de_dados.remove(removida);
+				return true;
+			}
+			
+			
 		}
 
 		salvar_base_de_dados_no_txt();
@@ -399,4 +408,58 @@ public class Server implements Operacoes_banco {
 		return maior_id;
 	}
 
+	public Conta buscar_conta(String parametro, int escolha_atributo)
+	{
+		System.out.println("Chegou aqui");
+		Conta retorno = null;
+		System.out.println();
+		switch(escolha_atributo)
+		{
+		//busca por nome
+		case 2:
+			System.out.println("Parametro = "  + parametro);
+			System.out.println("Busca por nome\n");
+			for(int cont=0;cont<base_de_dados.size();cont++)
+			{
+				Conta temporaria = base_de_dados.get(cont);
+				if(temporaria.getNomeCliente().equals(parametro)) return temporaria;
+			}
+
+			return null;
+		//busca por cpf
+		case 3:
+			for(int cont=0;cont<base_de_dados.size();cont++)
+			{
+				Conta temporaria = base_de_dados.get(cont);
+				if(temporaria.getCpfCliente().equals(parametro)) return temporaria;
+			}
+
+			return null;
+		//busca por endereço
+		case 4:
+			for(int cont=0;cont<base_de_dados.size();cont++)
+			{
+				Conta temporaria = base_de_dados.get(cont);
+				if(temporaria.getEnderecoCliente().equals(parametro)) return temporaria;
+			}
+
+			return null;
+		//busca por login
+		case 5:
+			for(int cont=0;cont<base_de_dados.size();cont++)
+			{
+				Conta temporaria = base_de_dados.get(cont);
+				if(temporaria.getDados_login().getUsuario().equals(parametro)) return temporaria;
+			}
+
+			return null;
+		
+			
+		}
+		
+		
+		return retorno;
+	}
+	
+	
 }

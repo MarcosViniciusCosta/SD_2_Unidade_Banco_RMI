@@ -420,7 +420,100 @@ public class Cliente {
 					}
 					break;
 				case 3:
-
+					
+					System.out.println("0 - Sair");
+					System.out.println("1 - Buscar por número da conta");
+					System.out.println("2 - Buscar por nome do usuário");
+					System.out.println("3 - Buscar por CPF do usuário");
+					System.out.println("4 - Buscar por endereço do usuário");
+					System.out.println("5 - Buscar por login do usuário");
+					System.out.print("Digite a opcão ao lado: ");
+					int opcao2 = teclado.nextInt();
+					// capturando o \n
+					teclado.nextLine();
+					
+					switch(opcao2)
+					{
+					case 1:
+						System.out.print("Digite o número da conta ao lado: ");
+						long numero_a_ser_buscado = teclado.nextLong();
+						// capturando o \n
+						teclado.nextLine();
+						
+						Conta resultado = stub.buscar_conta(numero_a_ser_buscado);
+						
+						if(resultado == null)
+						{
+							System.out.println("\nNão foi encontrada conta com o numero " + numero_a_ser_buscado);
+						}else
+						{
+							System.out.println("\n"+resultado.toString());
+						}
+						
+						
+						break;
+					case 2:
+						System.out.print("Digite o nome do cliente ao lado: ");
+						String nome_a_ser_buscado = teclado.nextLine();
+						Conta resultado1 = stub.buscar_conta(nome_a_ser_buscado, 2);
+						
+						if(resultado1 == null)
+						{
+							System.out.println("\nNão foi encontrada conta com o nome " + nome_a_ser_buscado);
+						}else
+						{
+							System.out.println("\n"+resultado1.toString());
+						}
+						
+						
+						break;
+					case 3:
+						System.out.print("Digite o CPF do cliente ao lado: ");
+						String cpf_a_ser_buscado = teclado.nextLine();
+						Conta resultado2 = stub.buscar_conta(cpf_a_ser_buscado, 3);
+						
+						if(resultado2 == null)
+						{
+							System.out.println("\nNão foi encontrada conta com o cpf " + cpf_a_ser_buscado);
+						}else
+						{
+							System.out.println("\n"+resultado2.toString());
+						}
+						break;
+					case 4:
+						System.out.print("Digite o endereço do cliente ao lado: ");
+						String endereco_a_ser_buscado = teclado.nextLine();
+						Conta resultado3 = stub.buscar_conta(endereco_a_ser_buscado, 4);
+						
+						if(resultado3 == null)
+						{
+							System.out.println("\nNão foi encontrada conta com o endereco " + endereco_a_ser_buscado);
+						}else
+						{
+							System.out.println("\n"+resultado3.toString());
+						}
+						break;
+					case 5:
+						System.out.print("Digite o login do cliente ao lado: ");
+						String login_a_ser_buscado = teclado.nextLine();
+						Conta resultado4 = stub.buscar_conta(login_a_ser_buscado, 5);
+						
+						if(resultado4 == null)
+						{
+							System.out.println("\nNão foi encontrada conta com o login " + login_a_ser_buscado);
+						}else
+						{
+							System.out.println("\n"+resultado4.toString());
+						}
+						break;
+					
+					case 0:
+						System.out.println("Saindo...");
+						break;
+						
+					}
+					
+					
 					break;
 				case 4:
 					System.out.println(stub.listar_contas());
@@ -455,7 +548,7 @@ public class Cliente {
 							System.out.println("Conta de número "+numero_conta_a_ser_excluida+" foi excluida com sucesso!");
 						}else
 						{
-							System.out.println("Conta de número "+numero_conta_a_ser_excluida+" não foi encontrada!");
+							System.out.println("Conta de número "+numero_conta_a_ser_excluida+" não foi encontrada ou não pediu remoção!");
 						}
 
 

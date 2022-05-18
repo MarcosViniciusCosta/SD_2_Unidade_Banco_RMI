@@ -153,4 +153,43 @@ public class Conta implements Serializable{
 		}
 	}
 	
+	public String toString() 
+	{
+		String retorno = "";
+		
+		retorno += ("Número da conta do usuário: " + getNumeroContaCliente()+"\n");
+		retorno += ("Nome do usuário: " + getNomeCliente()+"\n");
+		retorno += ("CPF do usuário: " + getCpfCliente()+"\n");
+		retorno += ("Endereço do usuário: " + getEnderecoCliente()+"\n");
+		retorno += ("Data de nascimento do usuário: " + getDataNascimentoCliente()+"\n");
+		retorno += ("Numero do telefone do usuario: " + getNumeroTelefonicoCliente()+"\n");
+		retorno += ("Login do usuario: " + getDados_login().getUsuario()+"\n");
+		retorno += ("Senha do usuario: " + getDados_login().getSenha()+"\n");
+		if( getDados_login().getTipo() == 0)
+		{
+			retorno += ("Usuário do tipo cliente\n");
+		}else
+		{
+			retorno += ("Usuário do tipo funcionário\n");
+		}
+		retorno += ("Saldo do usuario: " + getSaldo()+"\n");
+		if( getTipoInvestimento() == 0)
+		{
+			retorno += ("Investimento do usuário é do tipo poupança\n");
+		}else
+		{
+			retorno += ("Investimento do usuário é do tipo renda fixa\n");
+		}
+		if( isSolicitada_remocao())
+		{
+			retorno += ("Solicitação de remoção ativa\n");
+		}else
+		{
+			retorno += ("Solicitação de remoção inativa\n");
+		}
+		
+		
+		return retorno;
+	}
+	
 }
