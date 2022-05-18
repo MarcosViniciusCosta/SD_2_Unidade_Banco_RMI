@@ -34,7 +34,7 @@ public class Cliente {
 
 			/*
 			//criando conta para testar stubs
-			
+
             Dados_login dados_login = new Dados_login();
             System.out.print("Digite o seu login desejado: ");
             dados_login.setUsuario(teclado.nextLine());
@@ -56,9 +56,9 @@ public class Cliente {
             stub.criar_conta(c);
 			c.getDados_login().elevar_nivel_para_funcionario();
 			stub.editar_conta(c);
-			*/
+
 			//System.out.println(stub.listar_contas());
-			
+			 */
 			Conta logada = null;
 			boolean sair = false;
 
@@ -81,7 +81,7 @@ public class Cliente {
 					System.out.print("Digite sua senha ao lado: ");
 					String senha = teclado.nextLine();
 
-					
+
 					logada = stub.fazer_login(login, senha);
 
 					if(logada == null)
@@ -202,7 +202,7 @@ public class Cliente {
 				break;
 
 			case 4:
-				System.out.printf("Saldo atual: %.2f" + logada.getSaldo());
+				System.out.printf("Saldo atual: %.2f",logada.getSaldo());
 				System.out.print("Digite o valor a ser transferido: ");
 				double valor_a_ser_transferido = teclado.nextDouble();
 				//capturando o \n
@@ -227,7 +227,7 @@ public class Cliente {
 
 
 							System.out.println("Opera��o de transfer�ncia conclu�da com sucesso");
-							System.out.printf("Novo saldo: %.2f\n" + logada.getSaldo());
+							System.out.printf("Novo saldo: %.2f\n", logada.getSaldo());
 						}
 
 
@@ -373,7 +373,51 @@ public class Cliente {
 
 					break;
 				case 2:
+					System.out.println("Listando as conta abaixo: ");
+					System.out.println(stub.listar_contas());
+					System.out.print("Digite o número da conta que terá seus dados editados: ");
+					long id_conta_a_ser_editada = teclado.nextLong();
+					// captuando o /n
+					teclado.nextLine();
 
+					Conta conta_a_ser_editada = stub.buscar_conta(id_conta_a_ser_editada);
+
+					if(conta_a_ser_editada != null)
+					{
+						System.out.println("Dados modific�veis exibidos abaixo");
+						System.out.println("Nome do cliente: "+ conta_a_ser_editada.getNomeCliente());
+						System.out.println("CPF do cliente: "+ conta_a_ser_editada.getCpfCliente());
+						System.out.println("Endere�o atual do cliente: "+ conta_a_ser_editada.getEnderecoCliente());
+						System.out.println("Data de nascimento do cliente: "+ conta_a_ser_editada.getDataNascimentoCliente());
+						System.out.println("Numero telef�nico do cliente: " + conta_a_ser_editada.getNumeroTelefonicoCliente());
+						System.out.println("Login do cliente: " + conta_a_ser_editada.getDados_login().getUsuario());
+						System.out.println("Senha do cliente: " + conta_a_ser_editada.getDados_login().getSenha());
+
+						System.out.print("\nDigite o novo nome ao lado ou repita o atual: ");
+						conta_a_ser_editada.setNomeCliente(teclado.nextLine());
+						System.out.print("\nDigite o novo CPF ao lado ou repita o atual: ");
+						conta_a_ser_editada.setCpfCliente(teclado.nextLine());
+						System.out.print("\nDigite o novo endere�o atual ao lado ou repita o atual: ");
+						conta_a_ser_editada.setEnderecoCliente(teclado.nextLine());
+						System.out.print("\nDigite a nova data de nascimento ao lado ou repita o atual: ");
+						SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+						conta_a_ser_editada.setDataNascimentoCliente(sdf1.parse(teclado.next()));
+						teclado.nextLine();
+						System.out.print("\nDigite o novo n�mero telef�nico ao lado ou repita o atual: ");
+						conta_a_ser_editada.setNumeroTelefonicoCliente(teclado.nextLine());
+						stub.editar_conta(logada);
+						System.out.print("\nDigite o novo login ao lado ou repita o atual: ");
+						conta_a_ser_editada.getDados_login().setUsuario(teclado.nextLine());
+						System.out.print("\nDigite a nova senha ao lado ou repita o atual: ");
+						conta_a_ser_editada.getDados_login().setSenha(teclado.nextLine());
+
+						//vinculando com a base de dados do servidor
+						stub.editar_conta(conta_a_ser_editada);
+						System.out.println("Conta atualizada com sucesso!");
+					}else
+					{
+						System.out.println("Erro, impossível encontrar uma conta com o número " + id_conta_a_ser_editada);
+					}
 					break;
 				case 3:
 
@@ -385,46 +429,46 @@ public class Cliente {
 				case 5:
 					System.out.println("Listando contas que pediram remoção:\n");
 					System.out.println(stub.listar_contas_a_serem_removidas());
-					
+
 					System.out.println("\n0 - Não remover nenhuma conta agora");
 					System.out.println("1 - Remover alguma conta agora");
 					System.out.print("Digite a opção ao lado: ");
 					int op = teclado.nextInt();
 					// capturando \n
 					teclado.nextLine();
-					
+
 					switch(op)
 					{
-						case 0:
-							System.out.println("Não será removida conta alguma.");
-							break;
-						case 1:
-							System.out.print("Digite o número da conta a ser excluida: ");
-							long numero_conta_a_ser_excluida = teclado.nextLong();
-							// capturando \n
-							teclado.nextLine();
-							
-							boolean deu_certo = stub.remover_conta(numero_conta_a_ser_excluida);
-							
-							if(deu_certo == true)
-							{
-								System.out.println("Conta de número "+numero_conta_a_ser_excluida+" foi excluida com sucesso!");
-							}else
-							{
-								System.out.println("Conta de número "+numero_conta_a_ser_excluida+" não foi encontrada!");
-							}
-							
-							
-							break;
+					case 0:
+						System.out.println("Não será removida conta alguma.");
+						break;
+					case 1:
+						System.out.print("Digite o número da conta a ser excluida: ");
+						long numero_conta_a_ser_excluida = teclado.nextLong();
+						// capturando \n
+						teclado.nextLine();
+
+						boolean deu_certo = stub.remover_conta(numero_conta_a_ser_excluida);
+
+						if(deu_certo == true)
+						{
+							System.out.println("Conta de número "+numero_conta_a_ser_excluida+" foi excluida com sucesso!");
+						}else
+						{
+							System.out.println("Conta de número "+numero_conta_a_ser_excluida+" não foi encontrada!");
+						}
+
+
+						break;
 					}
-					
-					
-					
+
+
+
 					break;
 				case 6:
 					System.out.printf("Saldo da conta atual = %.2f\n",logada.getSaldo());
 					break;
-					
+
 				case 7:
 
 					System.out.print("Digite o valor a ser sacado:");
@@ -467,10 +511,10 @@ public class Cliente {
 					}
 
 					break;
-					
+
 				case 9:
 
-					System.out.printf("Saldo atual: %.2f" + logada.getSaldo());
+					System.out.printf("Saldo atual: %.2f\n",logada.getSaldo());
 					System.out.print("Digite o valor a ser transferido: ");
 					double valor_a_ser_transferido = teclado.nextDouble();
 					//capturando o \n
@@ -493,12 +537,12 @@ public class Cliente {
 									logada.getDados_login().getSenha());
 
 							System.out.println("Operação de transferência concluída com sucesso");
-							System.out.printf("Novo saldo: %.2f\n" + logada.getSaldo());
+							System.out.printf("Novo saldo: %.2f\n", logada.getSaldo());
 						}
 					}
 
 					break;
-					
+
 				case 10:
 
 					// conta poupan�a
@@ -535,11 +579,11 @@ public class Cliente {
 					}
 					stub.editar_conta(logada);
 					break;
-					
+
 				case 12:
 					System.out.println("Saindo...");
 					return 2;
-					
+
 				}
 
 			} catch (ParseException e) {

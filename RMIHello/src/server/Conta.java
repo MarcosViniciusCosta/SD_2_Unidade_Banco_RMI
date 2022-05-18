@@ -4,7 +4,7 @@ import java.util.Date;
 
 
 public class Conta implements Serializable{
-	private static long controladorNumeroConta;
+	
 	private long numeroContaCliente;
 	private String cpfCliente;
 	private String nomeCliente;
@@ -16,15 +16,7 @@ public class Conta implements Serializable{
 	private int tipoInvestimento;	//	0 - poupança, 1 - renda fixa
 	private boolean solicitada_remocao;
 	
-	public static void setcontroladorNumeroConta(long novo_valor)
-	{
-		controladorNumeroConta = novo_valor;
-	}
 	
-	public static long getControladorNumeroConta()
-	{
-		return controladorNumeroConta; 
-	}
 	
 	
 	public int getTipoInvestimento() {
@@ -51,8 +43,7 @@ public class Conta implements Serializable{
 			Date dataNascimentoCliente, String numeroTelefonicoCliente, Dados_login dados_login)
 	{
 		// incrementando a quantidade de contas existentes
-		setcontroladorNumeroConta(getControladorNumeroConta()+1);
-		setNumeroContaCliente(controladorNumeroConta);
+		
 		setCpfCliente(cpfCliente);
 		setNomeCliente(nomeCliente);
 		setEnderecoCliente(enderecoCliente);
@@ -102,11 +93,6 @@ public class Conta implements Serializable{
 
 	public long getNumeroContaCliente() {
 		return numeroContaCliente;
-	}
-	
-	public void setNumeroContaCliente() {
-		controladorNumeroConta++;
-		this.numeroContaCliente = controladorNumeroConta;
 	}
 	
 	public String getCpfCliente() {

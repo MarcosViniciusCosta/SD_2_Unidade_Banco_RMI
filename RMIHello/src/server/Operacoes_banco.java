@@ -28,5 +28,5 @@ public interface Operacoes_banco extends Remote {
     double consultar_saldo (Conta c) throws RemoteException;
     boolean aderir_renda_fixa(Conta c) throws RemoteException;
     String listar_contas_a_serem_removidas() throws RemoteException;
-    
+    Conta buscar_conta(long id) throws RemoteException;
 }

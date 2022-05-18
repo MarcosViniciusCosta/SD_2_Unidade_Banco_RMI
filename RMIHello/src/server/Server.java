@@ -26,6 +26,7 @@ public class Server implements Operacoes_banco {
 
 	public Server() {}
 	static ArrayList<Conta> base_de_dados; 
+	private static long controladorNumeroConta;
 	// implementação do método oi()
 	// teste
 
@@ -101,8 +102,10 @@ public class Server implements Operacoes_banco {
 	}
 
 	@Override
-	public Conta criar_conta(Conta c) throws RemoteException {
-
+	public Conta criar_conta(Conta c) throws RemoteException 
+	{
+		controladorNumeroConta++;
+		c.setNumeroContaCliente(controladorNumeroConta);
 		base_de_dados.add(c);
 		salvar_base_de_dados_no_txt();
 		return c;
@@ -121,7 +124,7 @@ public class Server implements Operacoes_banco {
 			base_de_dados.remove(temporaria);
 			base_de_dados.add(c);
 		}
-		
+
 		salvar_base_de_dados_no_txt();
 		return c;
 	}
@@ -163,7 +166,7 @@ public class Server implements Operacoes_banco {
 	{
 
 		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
-		
+
 
 		if(conta_atual == null)
 		{
@@ -209,14 +212,14 @@ public class Server implements Operacoes_banco {
 		return true;
 	}
 
-	
+
 	@Override
 	public double consultar_saldo(Conta c) throws RemoteException 
 	{
-		
+
 		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
-		
-		
+
+
 		if(conta_atual == null)
 		{
 			System.out.println("Erro, conta não encontrada");
@@ -227,18 +230,18 @@ public class Server implements Operacoes_banco {
 			System.out.println("Saldo atual = "+ conta_atual.getSaldo());
 			return conta_atual.getSaldo();
 		}
-		
-		
+
+
 	}
 
-	
+
 	@Override
 	public boolean aderir_renda_fixa(Conta c) throws RemoteException 
 	{
-		
+
 		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
-		
-		
+
+
 		if(conta_atual == null)
 		{
 			System.out.println("Erro, conta não encontrada");
@@ -249,112 +252,121 @@ public class Server implements Operacoes_banco {
 			conta_atual.setTipoInvestimento(1);
 			System.out.println("Conta "+ conta_atual.getNumeroContaCliente() +" Aderiu a renda fixa.");
 		}
-		
+
 		salvar_base_de_dados_no_txt();
 		return true;
 	}
-	
-	
-	private Conta buscar_conta(long id_conta_buscada)
+
+	@Override
+	public Conta buscar_conta(long id_conta_buscada)
 	{
 		for(int cont=0;cont<base_de_dados.size();cont++)
 		{
 			Conta temporaria = base_de_dados.get(cont);
 			if(temporaria.getNumeroContaCliente() == id_conta_buscada) return temporaria;
 		}
-		
+
 		return null;
 	}
-	
+
 	@Override
 	public boolean transferir_saldo (Conta origem,double valor,long id_conta_alvo)
 	{
-		Conta conta_alvo = buscar_conta(id_conta_alvo);
-		if(conta_alvo == null)
-		{
+		try {
+			Conta conta_alvo = buscar_conta(id_conta_alvo);
+			if(conta_alvo == null)
+			{
+				return false;
+			}else
+			{
+				origem.setSaldo(origem.getSaldo()-valor);
+				// atualizando a base de dados no arraylist
+				editar_conta(origem);
+
+				conta_alvo.setSaldo(conta_alvo.getSaldo()+valor);
+				salvar_base_de_dados_no_txt();
+			}
+			return true;
+		} catch (RemoteException e) {
+			e.printStackTrace();
 			return false;
-		}else
-		{
-			origem.setSaldo(origem.getSaldo()-valor);
-			conta_alvo.setSaldo(conta_alvo.getSaldo()+valor);
-			salvar_base_de_dados_no_txt();
 		}
-		return true;
+		
 	}
-	
+
 	private static void ler_base_de_dados_do_txt()
 	{
 		String caminho = "base_de_dados.txt";
 		File arquivo = new File(caminho);
-		
+
 		try {
 			FileInputStream fileinput = new FileInputStream(arquivo);
 			ObjectInput objectinput = new ObjectInputStream(fileinput);
-			
+
 			base_de_dados = (ArrayList<Conta>) objectinput.readObject();
-			Conta.setcontroladorNumeroConta(base_de_dados.size());
-			System.out.println("Base de dados iniciando com o tamanho "+ base_de_dados.size());
+			controladorNumeroConta = descobrir_maior_id();
+			System.out.println("Base de dados iniciando com o tamanho "+ controladorNumeroConta);
 			objectinput.close();
 			fileinput.close();
-			
+
 		} catch (FileNotFoundException e) {
 			//e.printStackTrace();
 			// base de dados não encontrada, inicializando do zero
 			System.out.println("Base de dados iniciando vazia");
 			base_de_dados = new ArrayList<Conta>();
-			Conta.setcontroladorNumeroConta(base_de_dados.size());
+			controladorNumeroConta = descobrir_maior_id();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 	private static boolean salvar_base_de_dados_no_txt()
 	{
-		
-			String caminho = "base_de_dados.txt";
-			File arquivo = new File(caminho);
-			
-			if(arquivo.exists() == false) 
-			{
-				try {
-					arquivo.createNewFile();
-				} catch (IOException e) {
-					System.out.println("Arquivo não criado");
-					e.printStackTrace();
-					return false;
-				}
-			}
-			
-			
+
+		String caminho = "base_de_dados.txt";
+		File arquivo = new File(caminho);
+
+		if(arquivo.exists() == false) 
+		{
 			try {
-				FileOutputStream fileoutputstream = new FileOutputStream(arquivo);
-				
-				ObjectOutputStream objectoutputstream = new ObjectOutputStream(fileoutputstream);
-			
-				objectoutputstream.writeObject(base_de_dados);
-				
-				objectoutputstream.flush();
-				fileoutputstream.flush();
-				
-				objectoutputstream.close();
-				fileoutputstream.close();
-				
-				
-			} catch (FileNotFoundException e) {
+				arquivo.createNewFile();
+			} catch (IOException e) {
+				System.out.println("Arquivo não criado");
 				e.printStackTrace();
-			}catch (IOException e) {
-				e.printStackTrace();
+				return false;
 			}
-				
-		
+		}
+
+
+		try {
+			FileOutputStream fileoutputstream = new FileOutputStream(arquivo);
+
+			ObjectOutputStream objectoutputstream = new ObjectOutputStream(fileoutputstream);
+
+			objectoutputstream.writeObject(base_de_dados);
+
+			objectoutputstream.flush();
+			fileoutputstream.flush();
+
+			objectoutputstream.close();
+			fileoutputstream.close();
+
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+
+
 		return true;
 	} 
-	
+
 	@Override
 	public String listar_contas_a_serem_removidas() throws RemoteException 
 	{
@@ -368,10 +380,23 @@ public class Server implements Operacoes_banco {
 				retorno +="Nome do cliente: " + temporaria.getNomeCliente()+"\n";
 				//retorno +="Saldo do cliente: " + temporaria.getSaldo()+"\n\n\n";
 			}
-			
+
 		}
 		return retorno;
 	}
-	
-	
+
+	private static long descobrir_maior_id()
+	{
+		long maior_id = 0;
+
+		for(int cont=0;cont<base_de_dados.size();cont++)
+		{
+			if(base_de_dados.get(cont).getNumeroContaCliente() > maior_id)
+			{
+				maior_id = base_de_dados.get(cont).getNumeroContaCliente();
+			}
+		}
+		return maior_id;
+	}
+
 }
