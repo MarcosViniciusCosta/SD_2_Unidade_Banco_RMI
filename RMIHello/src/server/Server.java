@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import server.Conta;
 
 /* 
- * Servidor cria instância da implementação do objeto remoto, exporta-o e 
- * vincula essa instância a um nome no RMI Registry
- * O objeto remoto pode ser implementado no próprio servidor ou em alguma outra classe 
+ * Servidor cria instï¿½ncia da implementaï¿½ï¿½o do objeto remoto, exporta-o e 
+ * vincula essa instï¿½ncia a um nome no RMI Registry
+ * O objeto remoto pode ser implementado no prï¿½prio servidor ou em alguma outra classe 
  * 
  * */
 
@@ -27,7 +27,7 @@ public class Server implements Operacoes_banco {
 	public Server() {}
 	static ArrayList<Conta> base_de_dados; 
 	private static long controladorNumeroConta;
-	// implementação do método oi()
+	// implementaï¿½ï¿½o do mï¿½todo oi()
 	// teste
 
 
@@ -40,11 +40,11 @@ public class Server implements Operacoes_banco {
 
 			// cria um objeto stub do servidor
 
-			/* O método estático UnicastRemoteObject.exportObject exporta o objeto remoto 
-			 * fornecido para receber invocações de método remoto em uma porta 
-			 * TCP anônima e retorna o stub para o objeto remoto para passar aos clientes. 
+			/* O mï¿½todo estï¿½tico UnicastRemoteObject.exportObject exporta o objeto remoto 
+			 * fornecido para receber invocaï¿½ï¿½es de mï¿½todo remoto em uma porta 
+			 * TCP anï¿½nima e retorna o stub para o objeto remoto para passar aos clientes. 
 			 * 
-			 * Como resultado da chamada de exportObject, o RMI pode começar a escutar em um 
+			 * Como resultado da chamada de exportObject, o RMI pode comeï¿½ar a escutar em um 
 			 * novo server socket ou pode usar um server socket compartilhado para aceitar 
 			 * chamadas remotas de entrada para o objeto remoto. 
 			 * 
@@ -53,25 +53,25 @@ public class Server implements Operacoes_banco {
 			Operacoes_banco stub= (Operacoes_banco) UnicastRemoteObject.exportObject(refObjetoRemoto, 0);
 
 
-			// Acionar RMIRegistry na porta padrão(1099)  
+			// Acionar RMIRegistry na porta padrï¿½o(1099)  
 			/* 
-			 * Sem essa linha é preciso lançar o RMiRegistry via linha de comando
+			 * Sem essa linha ï¿½ preciso lanï¿½ar o RMiRegistry via linha de comando
 			 */
 			LocateRegistry.createRegistry( Registry.REGISTRY_PORT ); 
 
 			// associa o stub do servidor (objeto remoto) no rmiregistry
 
-			/* O método estático LocateRegistry.getRegistry, que não recebe 
+			/* O mï¿½todo estï¿½tico LocateRegistry.getRegistry, que nï¿½o recebe 
 			 * nenhum argumento, retorna um stub que implementa a interface 
-			 * remota java.rmi.registry.Registry e envia invocações para o 
-			 * registro (rmiregistry) no host do servidor na porta de registro padrão de 1099. 
+			 * remota java.rmi.registry.Registry e envia invocaï¿½ï¿½es para o 
+			 * registro (rmiregistry) no host do servidor na porta de registro padrï¿½o de 1099. 
 			 */ 
 			//System.out.println(InetAddress.getLocalHost().getHostAddress());
 			//Registry registry = LocateRegistry.getRegistry(InetAddress.getLocalHost().getHostAddress());
 
 			Registry registro = LocateRegistry.getRegistry();
 
-			/* O método bind é então chamado no stub do registro para vincular 
+			/* O mï¿½todo bind ï¿½ entï¿½o chamado no stub do registro para vincular 
 			 * o stub do objeto remoto ao nome "Hello" no registro.*/
 
 			registro.bind("Banco", stub);
@@ -118,7 +118,7 @@ public class Server implements Operacoes_banco {
 
 		if(temporaria == null)
 		{
-			System.out.println("Impossivel editar conta não existente");
+			System.out.println("Impossivel editar conta nï¿½o existente");
 		}else
 		{
 			base_de_dados.remove(temporaria);
@@ -135,10 +135,10 @@ public class Server implements Operacoes_banco {
 		Conta removida = buscar_conta(id);
 		if(removida == null)
 		{
-			//System.out.println("Impossível remover conta inexistente");
+			//System.out.println("Impossï¿½vel remover conta inexistente");
 		}else
 		{
-			// só podemos remover contas que solicitaram remoção
+			// sï¿½ podemos remover contas que solicitaram remoï¿½ï¿½o
 			if(removida.isSolicitada_remocao() == false) 
 			{
 				return false;
@@ -163,7 +163,7 @@ public class Server implements Operacoes_banco {
 		{
 			Conta temporaria = base_de_dados.get(cont);
 
-			retorno +="Número de conta: " + temporaria.getNumeroContaCliente()+"\n";
+			retorno +="Nï¿½mero de conta: " + temporaria.getNumeroContaCliente()+"\n";
 			retorno +="Nome do cliente: " + temporaria.getNomeCliente()+"\n";
 			retorno +="Saldo do cliente: " + temporaria.getSaldo()+"\n\n\n";
 		}
@@ -173,19 +173,18 @@ public class Server implements Operacoes_banco {
 	@Override
 	public boolean sacar_valor(Conta c,double valor) throws RemoteException 
 	{
-
 		Conta conta_atual = buscar_conta(c.getNumeroContaCliente());
 
 
 		if(conta_atual == null)
 		{
-			System.out.println("Erro, conta não encontrada");
+			System.out.println("Erro, conta nï¿½o encontrada");
 		}else
 		{
 			//saldo insuficiente
 			if(valor > conta_atual.getSaldo())
 			{
-				System.out.println("Impossível sacar um valor maior que o saldo atual");
+				System.out.println("Impossï¿½vel sacar um valor maior que o saldo atual");
 			}else
 			{
 				//saldo suficiente
@@ -208,7 +207,7 @@ public class Server implements Operacoes_banco {
 
 		if(conta_atual == null)
 		{
-			System.out.println("Erro, conta não encontrada");
+			System.out.println("Erro, conta nï¿½o encontrada");
 			return false;
 		}else
 		{
@@ -231,7 +230,7 @@ public class Server implements Operacoes_banco {
 
 		if(conta_atual == null)
 		{
-			System.out.println("Erro, conta não encontrada");
+			System.out.println("Erro, conta nï¿½o encontrada");
 			return -1;
 		}else
 		{
@@ -253,7 +252,7 @@ public class Server implements Operacoes_banco {
 
 		if(conta_atual == null)
 		{
-			System.out.println("Erro, conta não encontrada");
+			System.out.println("Erro, conta nï¿½o encontrada");
 			return false;
 		}else
 		{
@@ -320,7 +319,7 @@ public class Server implements Operacoes_banco {
 
 		} catch (FileNotFoundException e) {
 			//e.printStackTrace();
-			// base de dados não encontrada, inicializando do zero
+			// base de dados nï¿½o encontrada, inicializando do zero
 			System.out.println("Base de dados iniciando vazia");
 			base_de_dados = new ArrayList<Conta>();
 			controladorNumeroConta = descobrir_maior_id();
@@ -345,7 +344,7 @@ public class Server implements Operacoes_banco {
 			try {
 				arquivo.createNewFile();
 			} catch (IOException e) {
-				System.out.println("Arquivo não criado");
+				System.out.println("Arquivo nï¿½o criado");
 				e.printStackTrace();
 				return false;
 			}
@@ -385,7 +384,7 @@ public class Server implements Operacoes_banco {
 			Conta temporaria = base_de_dados.get(cont);
 			if(temporaria.isSolicitada_remocao() == true)
 			{
-				retorno +="Número de conta: " + temporaria.getNumeroContaCliente()+"\n";
+				retorno +="Nï¿½mero de conta: " + temporaria.getNumeroContaCliente()+"\n";
 				retorno +="Nome do cliente: " + temporaria.getNomeCliente()+"\n";
 				//retorno +="Saldo do cliente: " + temporaria.getSaldo()+"\n\n\n";
 			}
@@ -435,7 +434,7 @@ public class Server implements Operacoes_banco {
 			}
 
 			return null;
-		//busca por endereço
+		//busca por endereï¿½o
 		case 4:
 			for(int cont=0;cont<base_de_dados.size();cont++)
 			{

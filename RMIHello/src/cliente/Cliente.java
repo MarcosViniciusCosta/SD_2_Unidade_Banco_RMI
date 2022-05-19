@@ -157,19 +157,20 @@ public class Cliente {
 				//capturando o \n
 				teclado.nextLine();
 				try {
-					boolean deu_certo = stub.sacar_valor(logada, valor_a_ser_sacado);
+					if (valor_a_ser_sacado < 0)
+					{
+						System.out.println("Impossível sacar um valor negativo");
+					} else {
+						boolean deu_certo = stub.sacar_valor(logada, valor_a_ser_sacado);
 
-					if(deu_certo == false)
-					{
-						System.out.println("Saldo insuficiente");
-					}else
-					{
-						logada = stub.fazer_login(logada.getDados_login().getUsuario(),
-								logada.getDados_login().getSenha());
-						System.out.printf("Novo saldo: %.2f\n", logada.getSaldo());
+						if (deu_certo == false) {
+							System.out.println("Saldo insuficiente");
+						} else {
+							logada = stub.fazer_login(logada.getDados_login().getUsuario(),
+									logada.getDados_login().getSenha());
+							System.out.printf("Novo saldo: %.2f\n", logada.getSaldo());
+						}
 					}
-
-
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
@@ -184,18 +185,18 @@ public class Cliente {
 				try {
 					boolean deu_certo = stub.depositar_valor(logada, valor_a_ser_depositado);
 
-					if(deu_certo == false)
-					{
-						System.out.println("Conta n�o encontrada");
-					}else
-					{
-						// atualizar a conta que est� em se��o atual
-						logada = stub.fazer_login(logada.getDados_login().getUsuario(),
-								logada.getDados_login().getSenha());
-						System.out.printf("Novo saldo = %.2f\n",logada.getSaldo());
+					if (valor_a_ser_depositado < 0) {
+						System.out.println("Impossível depositar um valor negativo");
+					} else {
+						if (deu_certo == false) {
+							System.out.println("Conta n�o encontrada");
+						} else {
+							// atualizar a conta que est� em se��o atual
+							logada = stub.fazer_login(logada.getDados_login().getUsuario(),
+									logada.getDados_login().getSenha());
+							System.out.printf("Novo saldo = %.2f\n", logada.getSaldo());
+						}
 					}
-
-
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
@@ -291,7 +292,7 @@ public class Cliente {
 				try {
 					System.out.println("Dados modific�veis exibidos abaixo");
 					System.out.println("Endere�o atual: "+ logada.getEnderecoCliente());
-					System.out.println("Data de nascimento: "+ logada.getDataNascimentoCliente());
+					System.out.println("Data de nascimento: "+ new SimpleDateFormat("dd/MM/yyyy").format(logada.getDataNascimentoCliente()));
 					System.out.println("Numero telef�nico: " + logada.getNumeroTelefonicoCliente());
 					System.out.print("\nDigite o novo endere�o atual ao lado ou repita o atual: ");
 					logada.setEnderecoCliente(teclado.nextLine());
@@ -388,7 +389,7 @@ public class Cliente {
 						System.out.println("Nome do cliente: "+ conta_a_ser_editada.getNomeCliente());
 						System.out.println("CPF do cliente: "+ conta_a_ser_editada.getCpfCliente());
 						System.out.println("Endere�o atual do cliente: "+ conta_a_ser_editada.getEnderecoCliente());
-						System.out.println("Data de nascimento do cliente: "+ conta_a_ser_editada.getDataNascimentoCliente());
+						System.out.println("Data de nascimento do cliente: "+ new SimpleDateFormat("dd/MM/yyyy").format(conta_a_ser_editada.getDataNascimentoCliente()));
 						System.out.println("Numero telef�nico do cliente: " + conta_a_ser_editada.getNumeroTelefonicoCliente());
 						System.out.println("Login do cliente: " + conta_a_ser_editada.getDados_login().getUsuario());
 						System.out.println("Senha do cliente: " + conta_a_ser_editada.getDados_login().getSenha());
@@ -566,19 +567,23 @@ public class Cliente {
 
 					System.out.print("Digite o valor a ser sacado:");
 					double valor_a_ser_sacado = teclado.nextDouble();
-					//capturando o \n
-					teclado.nextLine();
 
-					boolean deu_certo = stub.sacar_valor(logada, valor_a_ser_sacado);
+					if (valor_a_ser_sacado < 0)
+					{
+						System.out.println("Impossível sacar um valor negativo");
+					} else {
+						//capturando o \n
+						teclado.nextLine();
 
-					if(deu_certo == false)
-					{
-						System.out.println("Saldo insuficiente");
-					}else
-					{
-						logada = stub.fazer_login(logada.getDados_login().getUsuario(),
-								logada.getDados_login().getSenha());
-						System.out.printf("Novo saldo: %.2f\n", logada.getSaldo());
+						boolean deu_certo = stub.sacar_valor(logada, valor_a_ser_sacado);
+
+						if (deu_certo == false) {
+							System.out.println("Saldo insuficiente");
+						} else {
+							logada = stub.fazer_login(logada.getDados_login().getUsuario(),
+									logada.getDados_login().getSenha());
+							System.out.printf("Novo saldo: %.2f\n", logada.getSaldo());
+						}
 					}
 
 					break;
@@ -590,17 +595,20 @@ public class Cliente {
 					//capturando o \n
 					teclado.nextLine();
 
-					boolean deu_certo1 = stub.depositar_valor(logada, valor_a_ser_depositado);
+					if (valor_a_ser_depositado < 0)
+					{
+						System.out.println("Impossível depositar um valor negativo");
+					} else {
+						boolean deu_certo1 = stub.depositar_valor(logada, valor_a_ser_depositado);
 
-					if(deu_certo1 == false)
-					{
-						System.out.println("Conta não encontrada");
-					}else
-					{
-						// atualizar a conta que est� em se��o atual
-						logada = stub.fazer_login(logada.getDados_login().getUsuario(),
-								logada.getDados_login().getSenha());
-						System.out.printf("Novo saldo = %.2f\n",logada.getSaldo());
+						if (deu_certo1 == false) {
+							System.out.println("Conta não encontrada");
+						} else {
+							// atualizar a conta que est� em se��o atual
+							logada = stub.fazer_login(logada.getDados_login().getUsuario(),
+									logada.getDados_login().getSenha());
+							System.out.printf("Novo saldo = %.2f\n", logada.getSaldo());
+						}
 					}
 
 					break;
