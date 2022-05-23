@@ -23,7 +23,7 @@ public class Cliente {
 
 		Scanner teclado = new Scanner(System.in);
 
-		System.out.println("Informe o nome/endere�o do RMIRegistry:");
+		System.out.println("Informe o nome/endereço do RMIRegistry:");
 		String host = teclado.nextLine();
 
 
@@ -127,7 +127,7 @@ public class Cliente {
 	{
 
 		int opcao = 0;
-		while(opcao != 11)
+		while(opcao != 11 && opcao != 7)
 		{
 			System.out.println("\n1 - Consultar saldo");
 			System.out.println("2 - Realizar saque");
